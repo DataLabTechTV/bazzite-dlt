@@ -9,5 +9,5 @@ dnf5 -y install niri
 dnf5 -y copr disable avengemedia/dms
 
 dnf5 config-manager setopt terra.enabled=1
-dnf5 -y install noctalia-shell vicinae
+dnf5 -y install noctalia-shell
 dnf5 config-manager setopt terra.enabled=0
