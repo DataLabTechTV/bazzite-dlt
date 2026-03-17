@@ -1,14 +1,15 @@
-// spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
-// spawn-at-startup "/usr/lib/pam_kwallet_init"
+spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
+
 spawn-at-startup "qs" "-c" "noctalia-shell"
 
-input {
-    keyboard {
-        xkb { layout "us"; }
-        numlock
-    }
+screenshot-path "~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
 
-    // focus-follows-mouse
+input {
+  keyboard {
+    xkb { layout "us"; }
+    numlock
+  }
 }
 
 output "DP-1" {
@@ -17,8 +18,76 @@ output "DP-1" {
 
 binds {
   Mod+Return cooldown-ms=500 { spawn "kitty"; }
-  Mod+Space repeat=false { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+  Mod+Space repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+  Mod+Shift+E { quit; }
+  Mod+O repeat=false { toggle-overview; }
+  Mod+Q repeat=false { close-window; }
+
+  Mod+Left { focus-column-left; }
+  Mod+Down { focus-window-down; }
+  Mod+Up { focus-window-up; }
+  Mod+Right { focus-column-right; }
+  Mod+H { focus-column-left; }
+  Mod+J { focus-window-down; }
+  Mod+K { focus-window-up; }
+  Mod+L { focus-column-right; }
+  Mod+Home { focus-column-first; }
+  Mod+End { focus-column-last; }
+  Mod+Page_Down { focus-workspace-down; }
+  Mod+Page_Up { focus-workspace-up; }
+  Mod+U { focus-workspace-down; }
+  Mod+I { focus-workspace-up; }
+
+  Mod+Shift+Left { move-column-left; }
+  Mod+Shift+Down { move-window-down; }
+  Mod+Shift+Up { move-window-up; }
+  Mod+Shift+Right { move-column-right; }
+  Mod+Shift+H { move-column-left; }
+  Mod+Shift+J { move-window-down; }
+  Mod+Shift+K { move-window-up; }
+  Mod+Shift+L { move-column-right; }
+  Mod+Shift+Home { move-column-to-first; }
+  Mod+Shift+End { move-column-to-last; }
+  Mod+Shift+Page_Down { move-column-to-workspace-down; }
+  Mod+Shift+Page_Up { move-column-to-workspace-up; }
+  Mod+Shift+U { move-column-to-workspace-down; }
+  Mod+Shift+I { move-column-to-workspace-up; }
+
+  Mod+1 { focus-workspace 1; }
+  Mod+2 { focus-workspace 2; }
+  Mod+3 { focus-workspace 3; }
+  Mod+4 { focus-workspace 4; }
+  Mod+5 { focus-workspace 5; }
+  Mod+6 { focus-workspace 6; }
+  Mod+7 { focus-workspace 7; }
+  Mod+8 { focus-workspace 8; }
+  Mod+9 { focus-workspace 9; }
+  Mod+Shift+1 { move-column-to-workspace 1; }
+  Mod+Shift+2 { move-column-to-workspace 2; }
+  Mod+Shift+3 { move-column-to-workspace 3; }
+  Mod+Shift+4 { move-column-to-workspace 4; }
+  Mod+Shift+5 { move-column-to-workspace 5; }
+  Mod+Shift+6 { move-column-to-workspace 6; }
+  Mod+Shift+7 { move-column-to-workspace 7; }
+  Mod+Shift+8 { move-column-to-workspace 8; }
+  Mod+Shift+9 { move-column-to-workspace 9; }
+
+  Mod+C { center-column; }
+
+  Mod+Shift+A { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+  Mod+Shift+S { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lockAndSuspend"; }
+
+  Print { screenshot; }
+  Shift+Print { screenshot-screen; }
+  Mod+Print { screenshot-window; }
+
+  XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }
+  XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
+  XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+  XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
 }
+
+prefer-no-csd
 
 window-rule {
   geometry-corner-radius 20
