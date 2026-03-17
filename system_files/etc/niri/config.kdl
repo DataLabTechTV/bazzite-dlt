@@ -101,8 +101,19 @@ binds {
 
 prefer-no-csd
 
+layout {
+  gaps 16
+
+  always-center-single-column
+
+  focus-ring {
+    width 1
+    active-color "#89b4fa"
+  }
+}
+
 window-rule {
-  geometry-corner-radius 20
+  geometry-corner-radius 16
   clip-to-geometry true
 }
 
