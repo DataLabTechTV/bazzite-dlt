@@ -2,7 +2,7 @@
 
 set -ouex pipefail
 
-dnf5 -y install kitty qt6c
+dnf5 -y install kitty qt6ct
 
 dnf5 -y copr enable avengemedia/dms
 dnf5 -y install niri
