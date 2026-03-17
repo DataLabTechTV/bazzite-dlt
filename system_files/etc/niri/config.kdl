@@ -4,6 +4,10 @@ spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPL
 
 spawn-at-startup "qs" "-c" "noctalia-shell"
 
+xwayland-satellite {
+  off
+}
+
 screenshot-path "~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
 
 input {
