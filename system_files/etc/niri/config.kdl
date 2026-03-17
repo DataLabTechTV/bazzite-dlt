@@ -102,6 +102,15 @@ window-rule {
   clip-to-geometry true
 }
 
+
+window-rule {
+  match title="^Picture-in-picture$"
+  open-floating true
+  default-column-width { fixed 480; }
+  default-window-height { fixed 270; }
+  default-floating-position x=5 y=5 relative-to="bottom-right"
+}
+
 debug {
   honor-xdg-activation-with-invalid-serial
 }
