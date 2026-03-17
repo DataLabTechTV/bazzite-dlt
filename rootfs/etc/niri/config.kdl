@@ -1,7 +1,17 @@
-spawn-at-startup "qs" "-c" "noctalia-shell"
-spawn-at-startup "vicinae" "server"
+spawn-sh-at-startup "/usr/lib/polkit-kde-authentication-agent-1 &"
+spawn-sh-at-startup "vicinae server &"
+spawn-sh-at-startup "qs -c noctalia-shell"
+
+input {
+    keyboard {
+        xkb { layout "us" }
+        numlock
+    }
+
+    focus-follows-mouse
+}
 
 binds {
-  Mod+Return { spawn "kitty"; }
+  Mod+Return cooldown-ms=500 { spawn "kitty"; }
   Mod+Space repeat=false { spawn "vicinae" "toggle"; }
 }
