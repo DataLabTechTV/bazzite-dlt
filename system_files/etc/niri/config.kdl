@@ -1,3 +1,4 @@
+spawn-at-startup "/usr/libexec/pam_kwallet_init"
 spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
 
@@ -7,8 +8,12 @@ screenshot-path "~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
 
 input {
   keyboard {
-    xkb { layout "us"; }
+    xkb { layout "pt"; }
     numlock
+  }
+
+  mouse {
+    accel-profile "flat"
   }
 }
 
@@ -17,11 +22,14 @@ output "DP-1" {
 }
 
 binds {
-  Mod+Return cooldown-ms=500 { spawn "kitty"; }
+  Mod+Return cooldown-ms=500 { spawn "kitty" "-d" "/home/dlt" "/bin/fish" "-l"; }
   Mod+Space repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
   Mod+Shift+E { quit; }
   Mod+O repeat=false { toggle-overview; }
   Mod+Q repeat=false { close-window; }
+  Mod+T { toggle-window-floating; }
+  Mod+F { fullscreen-window; }
+  Mod+M { maximize-column; }
 
   Mod+Left { focus-column-left; }
   Mod+Down { focus-window-down; }
@@ -81,8 +89,8 @@ binds {
   Shift+Print { screenshot-screen; }
   Mod+Print { screenshot-window; }
 
-  XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }
-  XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
+  XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03+"; }
+  XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03-"; }
   XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
   XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
 }
