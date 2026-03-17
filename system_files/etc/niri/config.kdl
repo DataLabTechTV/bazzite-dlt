@@ -8,6 +8,10 @@ xwayland-satellite {
   off
 }
 
+hotkey-overlay {
+  skip-at-startup
+}
+
 screenshot-path "~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
 
 input {
