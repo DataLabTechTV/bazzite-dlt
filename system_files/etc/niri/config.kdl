@@ -32,6 +32,14 @@ layout {
 
   always-center-single-column
 
+  preset-column-widths {
+    proportion 0.5
+    proportion 0.66667
+    proportion 0.33333
+  }
+
+  default-column-width { proportion 0.5; }
+
   focus-ring {
     width 1
     active-color "#89b4fa"
@@ -41,6 +49,21 @@ layout {
 window-rule {
   geometry-corner-radius 16
   clip-to-geometry true
+}
+
+window-rule {
+  match app-id="brave-browser"
+  open-maximized true
+}
+
+window-rule {
+  match app-id="kdenlive"
+  open-maximized true
+}
+
+window-rule {
+  match app-id="kdenlive" title="Kdenlive"
+  open-floating true
 }
 
 window-rule {
@@ -70,12 +93,13 @@ binds {
   XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
   XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
 
-  Mod+O repeat=false { toggle-overview; }
+  Mod+Tab repeat=false { toggle-overview; }
   Mod+Q repeat=false { close-window; }
   Mod+T { toggle-window-floating; }
   Mod+F { fullscreen-window; }
   Mod+M { maximize-column; }
   Mod+C { center-column; }
+  Mod+R { switch-preset-column-width; }
 
   Mod+Left { focus-column-left; }
   Mod+Down { focus-window-down; }
@@ -91,6 +115,10 @@ binds {
   Mod+Page_Up { focus-workspace-up; }
   Mod+U { focus-workspace-down; }
   Mod+I { focus-workspace-up; }
+  Mod+Ctrl+WheelScrollDown { focus-workspace-down; }
+  Mod+Ctrl+WheelScrollUp { focus-workspace-up; }
+  Mod+Ctrl+Shift+WheelScrollDown { move-column-to-workspace-down; }
+  Mod+Ctrl+Shift+WheelScrollUp { move-column-to-workspace-up; }
 
   Mod+Shift+Left { move-column-left; }
   Mod+Shift+Down { move-window-down; }
@@ -106,6 +134,10 @@ binds {
   Mod+Shift+Page_Up { move-column-to-workspace-up; }
   Mod+Shift+U { move-column-to-workspace-down; }
   Mod+Shift+I { move-column-to-workspace-up; }
+  Mod+WheelScrollDown { focus-column-right; }
+  Mod+WheelScrollUp { focus-column-left; }
+  Mod+Shift+WheelScrollDown { move-column-right; }
+  Mod+Shift+WheelScrollUp { move-column-left; }
 
   Mod+1 { focus-workspace 1; }
   Mod+2 { focus-workspace 2; }
