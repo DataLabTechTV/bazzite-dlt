@@ -1,22 +1,19 @@
 spawn-at-startup "/usr/libexec/pam_kwallet_init"
 spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
-
 spawn-at-startup "qs" "-c" "noctalia-shell"
-
-xwayland-satellite {
-  off
-}
-
-hotkey-overlay {
-  skip-at-startup
-}
 
 screenshot-path "~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
 
+prefer-no-csd
+
+hotkey-overlay {
+  hide-not-bound
+}
+
 input {
   keyboard {
-    xkb { layout "pt"; }
+    xkb { layout "us"; }
     numlock
   }
 
@@ -25,19 +22,60 @@ input {
   }
 }
 
-output "DP-1" {
-  scale 2.0
+cursor {
+  xcursor-theme "breeze_cursors"
+  xcursor-size 24
+}
+
+layout {
+  gaps 16
+
+  always-center-single-column
+
+  focus-ring {
+    width 1
+    active-color "#89b4fa"
+  }
+}
+
+window-rule {
+  geometry-corner-radius 16
+  clip-to-geometry true
+}
+
+window-rule {
+  match title="^Picture-in-picture$"
+  open-floating true
+  default-column-width { fixed 480; }
+  default-window-height { fixed 270; }
+  default-floating-position x=5 y=5 relative-to="bottom-right"
+}
+
+debug {
+  honor-xdg-activation-with-invalid-serial
 }
 
 binds {
-  Mod+Return cooldown-ms=500 { spawn "kitty" "-d" "/home/dlt" "/bin/fish" "-l"; }
-  Mod+Space repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
   Mod+Shift+E { quit; }
+  Mod+Shift+S repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
+  Mod+Space repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+  Mod+Return cooldown-ms=500 { spawn "kitty" "-d" "~" "/bin/fish" "-l"; }
+
+  Print { screenshot; }
+  Shift+Print { screenshot-screen; }
+  Mod+Print { screenshot-window; }
+
+  XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03+"; }
+  XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03-"; }
+  XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+  XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+
   Mod+O repeat=false { toggle-overview; }
   Mod+Q repeat=false { close-window; }
   Mod+T { toggle-window-floating; }
   Mod+F { fullscreen-window; }
   Mod+M { maximize-column; }
+  Mod+C { center-column; }
 
   Mod+Left { focus-column-left; }
   Mod+Down { focus-window-down; }
@@ -87,49 +125,5 @@ binds {
   Mod+Shift+7 { move-column-to-workspace 7; }
   Mod+Shift+8 { move-column-to-workspace 8; }
   Mod+Shift+9 { move-column-to-workspace 9; }
-
-  Mod+C { center-column; }
-
-  Mod+Shift+A { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-  Mod+Shift+S { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lockAndSuspend"; }
-
-  Print { screenshot; }
-  Shift+Print { screenshot-screen; }
-  Mod+Print { screenshot-window; }
-
-  XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03+"; }
-  XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03-"; }
-  XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-  XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
 }
 
-prefer-no-csd
-
-layout {
-  gaps 16
-
-  always-center-single-column
-
-  focus-ring {
-    width 1
-    active-color "#89b4fa"
-  }
-}
-
-window-rule {
-  geometry-corner-radius 16
-  clip-to-geometry true
-}
-
-
-window-rule {
-  match title="^Picture-in-picture$"
-  open-floating true
-  default-column-width { fixed 480; }
-  default-window-height { fixed 270; }
-  default-floating-position x=5 y=5 relative-to="bottom-right"
-}
-
-debug {
-  honor-xdg-activation-with-invalid-serial
-}
