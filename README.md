@@ -1,3 +1,9 @@
+# bazzite-dlt
+
+This custom Bazzite image is based on `bazzite-nvidia-open`, and it adds a preconfigured niri + noctalia minimal setup, providing tools or configs to solve tiny annoying issues. For example, `tray-launch` is a system-wide helper script that you can call to wrap misbehaving `spawn-at-startup` entries that fail to properly load the tray icon.
+
+DLT stands for Data Lab Tech, so Bazzite DLT provides all the software used for development and data-related tasks, as seen on the YouTube videos by [@DataLabTechTV](https://www.youtube.com/@DataLabTechTV).
+
 # image-template
 
 This repository is meant to be a template for building your own custom [bootc](https://github.com/bootc-dev/bootc) image. This template is the recommended way to make customizations to any image published by the Universal Blue Project.
