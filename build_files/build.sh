@@ -2,7 +2,7 @@
 
 set -ouex pipefail
 
-dnf5 -y install kitty qt6ct xdg-desktop-portal-gnome wlsunset cava
+dnf5 -y install kitty qt6ct xdg-desktop-portal-gnome wlsunset cava playerctl
 dnf5 -y remove xwaylandvideobridge
 
 dnf5 -y copr enable avengemedia/dms
