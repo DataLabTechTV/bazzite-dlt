@@ -1,8 +1,27 @@
-# bazzite-dlt
+# dltos
 
-This custom Bazzite image is based on `bazzite-nvidia-open`, and it adds a preconfigured niri + noctalia minimal setup, providing tools or configs to solve tiny annoying issues. For example, `tray-launch` is a system-wide helper script that you can call to wrap misbehaving `spawn-at-startup` entries that fail to properly load the tray icon.
+Custom Bazzite image based on [bazzite-nvidia-open](https://github.com/ublue-os/bazzite/pkgs/container/bazzite-nvidia-open). It adds a preconfigured [niri](https://niri-wm.github.io/niri/) + [noctalia](https://noctalia.dev/) minimal setup, providing a default system-wide config, as well as any tools or scripts required to solve any annoying or issues we might find. For example, we include a system-wide `tray-launch` script to wrap misbehaving `spawn-at-startup` entries that fail to properly load the tray icon.
 
-DLT stands for Data Lab Tech, so Bazzite DLT provides all the software used for development and data-related tasks, as seen on the YouTube videos by [@DataLabTechTV](https://www.youtube.com/@DataLabTechTV).
+DLT in `dltos` stands for Data Lab Tech, so `dltos` also provides all the software used for development, infra, and data-related tasks, as seen on the YouTube videos by [@DataLabTechTV](https://www.youtube.com/@DataLabTechTV).
+
+Below, the following sections, you'll find the documentation provided by the Universal Blue template that we used to build this image, but, in order to switch to `dltos`, you can simply run the following command on your Bazzite distro:
+
+```bash
+sudo bootc switch ghcr.io/datalabtechtv/dltos:latest
+```
+
+> [!CAUTION]
+> Make sure your system has an NVIDIA GPU, otherwise the image is unlikely to work, due to it being based on `bazzite-nvidia-open`.
+
+After you reboot, you'll be running `dltos`, with the default KDE and niri as an additional option. You can switch to niri as the default directly from the SDDM login manager shown on boot.
+
+When you need to update your system, you can either do it with `ujust update` or `rpm-ostree upgrade`, as usual, or can simply run:
+
+```bash
+sudo bootc upgrade
+```
+
+I mostly maintain this image for myself and any viewers who want the same experience of what they see on my videos out-of-the-box. Regardless, if you have any requests, please let me know through the Discussion
 
 # image-template
 
@@ -166,9 +185,9 @@ Once the workflow is done, you'll find the disk images either in your S3 bucket 
 
 This template comes with the necessary tooling to index your image on [artifacthub.io](https://artifacthub.io). Use the `artifacthub-repo.yml` file at the root to verify yourself as the publisher. This is important to you for a few reasons:
 
-- The value of artifacthub is it's one place for people to index their custom images, and since we depend on each other to learn, it helps grow the community. 
+- The value of artifacthub is it's one place for people to index their custom images, and since we depend on each other to learn, it helps grow the community.
 - You get to see your pet project listed with the other cool projects in Cloud Native.
-- Since the site puts your README front and center, it's a good way to learn how to write a good README, learn some marketing, finding your audience, etc. 
+- Since the site puts your README front and center, it's a good way to learn how to write a good README, learn some marketing, finding your audience, etc.
 
 [Discussion Thread](https://universal-blue.discourse.group/t/listing-your-custom-image-on-artifacthub/6446)
 
