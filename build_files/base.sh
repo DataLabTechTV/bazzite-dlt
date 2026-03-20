@@ -10,4 +10,4 @@ dnf5 -y copr enable avengemedia/dms
 dnf5 -y install niri
 dnf5 -y copr disable avengemedia/dms
 
-dnf5 -y --enablerepo=terra install noctalia-shell
+dnf5 -y --enable-repo=terra install noctalia-shell
