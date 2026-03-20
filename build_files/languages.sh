@@ -3,7 +3,7 @@
 set -euxo pipefail
 
 # shellcheck source=goenv.sh
-source goenv.sh
+source "$(dirname "${BASH_SOURCE[0]}")/goenv.sh"
 
 dnf5 -y install golang cargo uv nodejs
 dnf5 -y install golangci-lint
