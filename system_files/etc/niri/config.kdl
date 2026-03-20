@@ -120,11 +120,21 @@ binds {
   Shift+Print { screenshot-screen; }
   Mod+Print { screenshot-window; }
 
-  // --- Media ---
+  // ------------------------------------
+  // Media
+  // ------------------------------------
+
+  // --- Volume ---
   XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03+"; }
   XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03-"; }
   XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
   XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+
+  // --- Player ---
+  XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
+  XF86AudioStop allow-when-locked=true { spawn "playerctl" "stop"; }
+  XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
+  XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
 
   // ------------------------------------
   // Windows
