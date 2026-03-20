@@ -1,3 +1,23 @@
 #!/bin/bash
+
+usage() {
+    echo "Usage: tray-launch PROGRAM [ARGS...]"
+    echo "Launch a program after the system tray interface for KDE is ready."
+    echo
+    echo "Options:"
+    echo "  -h, --help    Show this help message and exit"
+}
+
+if [[ $# -lt 1 ]]; then
+    echo "Error: Insufficient arguments."
+    usage
+    exit 1
+fi
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    usage
+    exit 0
+fi
+
 gdbus wait --session org.kde.StatusNotifierWatcher
 exec "$@"
