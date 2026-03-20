@@ -2,8 +2,11 @@
 
 set -euxo pipefail
 
-# shellcheck source=goenv.sh
-source "$(dirname "${BASH_SOURCE[0]}")/goenv.sh"
+# shellcheck source=go-env.sh
+source "$(dirname "${BASH_SOURCE[0]}")/go-env.sh"
+
+# shellcheck source=cargo-env.sh
+source "$(dirname "${BASH_SOURCE[0]}")/cargo-env.sh"
 
 dnf5 -y install golang cargo uv nodejs
 dnf5 -y install golangci-lint
@@ -11,4 +14,4 @@ dnf5 -y install golangci-lint
 go install golang.org/x/tools/gopls@latest
 go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
-cargo install --root /usr just-lsp
+cargo install just-lsp
