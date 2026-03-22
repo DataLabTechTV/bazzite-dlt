@@ -8,8 +8,8 @@ source "$(dirname "${BASH_SOURCE[0]}")/uv-env.sh"
 dnf5 -y install sqlite3
 dnf5 -y install miller gnuplot
 
-curl -L https://install.duckdb.org/v1.5.0/duckdb_cli-linux-amd64.zip | funzip >/var/usrlocal/bin/duckdb
-chmod +x /var/usrlocal/bin/duckdb
+curl -L https://install.duckdb.org/v1.5.0/duckdb_cli-linux-amd64.zip | funzip >/usr/bin/duckdb
+chmod +x /usr/bin/duckdb
 
 uv tool install --link-mode=copy termgraph
 uv tool install --link-mode=copy visidata

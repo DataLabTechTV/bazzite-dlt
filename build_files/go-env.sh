@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GOBIN=/var/usrlocal/bin
+export GOBIN=/usr/bin
 export GOPATH=/var/cache/go
 export GOCACHE=/var/cache/go-build
 
