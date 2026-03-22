@@ -1,9 +1,5 @@
 #!/bin/bash
 
 export UV_CACHE_DIR=/var/cache/uv
-
-UV_TOOL_DIR=$(readlink -f /usr/local)
-export UV_TOOL_DIR
-
-UV_TOOL_BIN_DIR=$(readlink -f /usr/local/bin)
-export UV_TOOL_BIN_DIR
+export UV_TOOL_DIR=/var/usrlocal
+export UV_TOOL_BIN_DIR=/var/usrlocal/bin
