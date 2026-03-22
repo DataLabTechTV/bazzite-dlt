@@ -1,4 +1,6 @@
 #!/bin/bash
 
 export CARGO_HOME=/var/cache/cargo
-export CARGO_INSTALL_ROOT=/usr/local
+
+CARGO_INSTALL_ROOT=$(readlink -f /usr/local)
+export CARGO_INSTALL_ROOT
