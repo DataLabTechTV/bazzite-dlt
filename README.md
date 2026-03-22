@@ -5,7 +5,7 @@
   <img alt="Shows the dltos logo, with three diagonal stripes in dark blue, cyan, and yellow. In the center, the acronym DLT is displayed in pink." src="https://raw.githubusercontent.com/DataLabTechTV/dltos/refs/heads/main/repo_files/dltos-logo.png" width="150px">
 </picture>
 
-# dltos
+# DLT OS
 
 Custom Bazzite image based on [bazzite-nvidia-open](https://github.com/ublue-os/bazzite/pkgs/container/bazzite-nvidia-open). It adds a preconfigured [niri](https://niri-wm.github.io/niri/) + [noctalia](https://noctalia.dev/) minimal setup, providing a default system-wide config, as well as any tools or scripts required to solve any annoying or issues we might find. For example, we include a system-wide `tray-launch` script to wrap misbehaving `spawn-at-startup` entries that fail to properly load the tray icon.
 
