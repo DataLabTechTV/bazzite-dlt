@@ -65,4 +65,5 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
   --mount=type=tmpfs,dst=/tmp \
   /ctx/validations.sh
 
+RUN rm -rf /run/* /tmp/*
 RUN bootc container lint
