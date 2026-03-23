@@ -11,7 +11,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/uv-env.sh"
 dnf5 -y install rclone
 dnf5 -y install iperf3
 dnf5 -y install mkcert
-dnf5 -y install nc nmap
+dnf5 -y install nc nmap prettyping
 
 go install github.com/minio/mc@latest
 go install github.com/peak/s5cmd/v2@master
