@@ -9,7 +9,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/go-env.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/cargo-env.sh"
 
 dnf5 -y install golang cargo uv nodejs-npm
-dnf5 -y install golangci-lint
+dnf5 -y install golangci-lint delve
 
 go install golang.org/x/tools/gopls@latest
 go install mvdan.cc/sh/v3/cmd/shfmt@latest
