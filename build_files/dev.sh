@@ -6,6 +6,7 @@ set -euxo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/go-env.sh"
 
 dnf5 -y install pre-commit cloc git-delta neovim
+dnf5 -y remove vim-minimal
 alternatives --install /usr/bin/vim vim /usr/bin/nvim 100
 
 dnf5 -y copr enable dejan/lazygit
