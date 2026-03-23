@@ -14,4 +14,3 @@ dnf5 -y install zoxide bat ripgrep fd-find
 cargo install eza
 
 dnf5 -y install ncdu
-dnf5 -y install yq
