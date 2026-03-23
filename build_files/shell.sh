@@ -5,6 +5,9 @@ set -euxo pipefail
 # shellcheck source=cargo-env.sh
 source "$(dirname "${BASH_SOURCE[0]}")/cargo-env.sh"
 
+# shellcheck source=go-env.sh
+source "$(dirname "${BASH_SOURCE[0]}")/go-env.sh"
+
 dnf5 -y copr enable atim/starship
 dnf5 -y install starship
 dnf5 -y copr disable atim/starship
@@ -14,3 +17,4 @@ dnf5 -y install zoxide bat ripgrep fd-find
 cargo install eza
 
 dnf5 -y install ncdu
+go install filippo.io/age/cmd/...@latest
