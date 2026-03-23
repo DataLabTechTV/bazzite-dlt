@@ -11,7 +11,11 @@ Custom Bazzite image based on [bazzite-nvidia-open](https://github.com/ublue-os/
 
 DLT in `dltos` stands for Data Lab Tech, so `dltos` also provides all the software used for development, infra, and data-related tasks, as seen on the YouTube videos by [@DataLabTechTV](https://www.youtube.com/@DataLabTechTV).
 
-Below, the following sections, you'll find the documentation provided by the Universal Blue template that we used to build this image, but, in order to switch to `dltos`, you can simply run the following command on your Bazzite distro:
+I mostly maintain this image for myself and any viewers who want the same experience of what they see on my videos out-of-the-box. Regardless, if you have any requests, please let me know through the Discussion section.
+
+## Switching to DLT OS
+
+Below, the following sections, you'll find the documentation provided by the Universal Blue template that we used to build this image, but, in order to switch to `dltos` from `bazzite-nvidia-open`, you can simply run the following command:
 
 ```bash
 sudo bootc switch ghcr.io/datalabtechtv/dltos:latest
@@ -22,13 +26,13 @@ sudo bootc switch ghcr.io/datalabtechtv/dltos:latest
 
 After you reboot, you'll be running `dltos`, with the default KDE and niri as an additional option. You can switch to niri as the default directly from the SDDM login manager shown on boot.
 
+## Upgrading DLT OS
+
 When you need to update your system, you can either do it with `ujust update` or `rpm-ostree upgrade`, as usual, or can simply run:
 
 ```bash
 sudo bootc upgrade
 ```
-
-I mostly maintain this image for myself and any viewers who want the same experience of what they see on my videos out-of-the-box. Regardless, if you have any requests, please let me know through the Discussion
 
 # image-template
 
