@@ -13,5 +13,5 @@ dnf5 -y install chezmoi direnv kitty
 dnf5 -y install zoxide bat ripgrep fd-find
 cargo install eza
 
-dnf5 -y install ncdu btop prettyping
-dnf5 -y install jq yq
+dnf5 -y install ncdu prettyping
+dnf5 -y install yq
