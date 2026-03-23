@@ -11,5 +11,5 @@ dnf5 -y install miller gnuplot
 curl -L https://install.duckdb.org/v1.5.0/duckdb_cli-linux-amd64.zip | funzip >/usr/bin/duckdb
 chmod +x /usr/bin/duckdb
 
-uv tool install --link-mode=copy termgraph
-uv tool install --link-mode=copy visidata
+uv tool install termgraph
+uv tool install visidata
