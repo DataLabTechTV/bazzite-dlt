@@ -13,9 +13,13 @@ DLT in `dltos` stands for Data Lab Tech, so `dltos` also provides all the softwa
 
 I mostly maintain this image for myself and any viewers who want the same experience of what they see on my videos out-of-the-box. Regardless, if you have any requests, please let me know through the Discussion section.
 
-## Switching to DLT OS
+For more details on how to build your own custom image, please read the [documentation](https://github.com/ublue-os/image-template/blob/main/README.md) provided with the Universal Blue template, which also applies to this image.
 
-Below, the following sections, you'll find the documentation provided by the Universal Blue template that we used to build this image, but, in order to switch to `dltos` from `bazzite-nvidia-open`, you can simply run the following command:
+## Maintenance
+
+### Switching
+
+In order to switch to `dltos` from `bazzite-nvidia-open`, you can simply run the following command:
 
 ```bash
 sudo bootc switch ghcr.io/datalabtechtv/dltos:latest
@@ -26,7 +30,7 @@ sudo bootc switch ghcr.io/datalabtechtv/dltos:latest
 
 After you reboot, you'll be running `dltos`, with the default KDE and niri as an additional option. You can switch to niri as the default directly from the SDDM login manager shown on boot.
 
-## Upgrading DLT OS
+### Upgrading
 
 When you need to update your system, you can either do it with `ujust update` or `rpm-ostree upgrade`, as usual, or can simply run:
 
@@ -34,267 +38,151 @@ When you need to update your system, you can either do it with `ujust update` or
 sudo bootc upgrade
 ```
 
-# image-template
+## Features
 
-This repository is meant to be a template for building your own custom [bootc](https://github.com/bootc-dev/bootc) image. This template is the recommended way to make customizations to any image published by the Universal Blue Project.
+- Preconfigured niri out-of-the-box, with the noctalia shell.
+- Go, Rust, Python, and Node tooling, providing `go`, `cargo`, `uv`,  and`npm`.
+- System-wide tools, installed via `dnf5`, `go install`, `cargo install`, or `uv tool install`, making it easy to naturally extend if you want to derive your custom image.
 
-# Community
+The following sections summarize the packages that DLT OS provides out-of-the-box.
 
-If you have questions about this template after following the instructions, try the following spaces:
-- [Universal Blue Forums](https://universal-blue.discourse.group/)
-- [Universal Blue Discord](https://discord.gg/WEu6BdFEtp)
-- [bootc discussion forums](https://github.com/bootc-dev/bootc/discussions) - This is not an Universal Blue managed space, but is an excellent resource if you run into issues with building bootc images.
+### Base
 
-# How to Use
+For the base system, we add `niri` and `noctalia-shell`, alongside a few utilities. We also remove `xwaylandvideobridge`, which opens a blank window by default on niri, but seems to be deprecated anyway. This let's us run the `xwayland-satellite` integration without issues.
 
-To get started on your first bootc image, simply read and follow the steps in the next few headings.
-If you prefer instructions in video form, TesterTech created an excellent tutorial, embedded below.
+| Package                    | Version  | Via    | Observation                                                                 |
+| -------------------------- | -------- | ------ | --------------------------------------------------------------------------- |
+| `xdg-desktop-portal-gnome` | >=49.0   | `dnf5` | Required for the *Screen Capture (PipeWire)* feature on OBS.                |
+| `qt6ct`                    | >=0.11   | `dnf5` | Let's you pick the Qt theme without using KDE utilities.                    |
+| `wev`                      | >=1.1.0  | `dnf5` | Keyboard and mouse event debugging utility.                                 |
+| `wlsunset`                 | >=0.4.0  | `dnf5` | Used for Noctalia's Night Light feature.                                    |
+| `cava`                     | >=0.10.2 | `dnf5` | Used for Noctalia's audio visualizers.                                      |
+| `playerctl`                | >=2.4.1  | `dnf5` | Controls your media player (e.g., Spotify) via preconfigured niri keybinds. |
 
-[![Video Tutorial](https://img.youtube.com/vi/IxBl11Zmq5w/0.jpg)](https://www.youtube.com/watch?v=IxBl11Zmq5wE)
+#### Portals
 
-## Step 0: Prerequisites
+Here are a few notes about portals. The system will install portal configs by default under `/usr/share/xdg-desktop-portal`. In DLT OS you'll find `niri-portals.conf` and `kde-portals.conf`, preinstalled by KDE and niri, respectively. By default, `niri-portals.conf` should be used. However, we currently still use `kwallet6`, and we haven't added `gnome-keyring` yet, so, for now, we suggest you create a custom config under `~/.config/xdg-desktop-portal/portals.conf` with the following configs:
 
-These steps assume you have the following:
-- A Github Account
-- A machine running a bootc image (e.g. Bazzite, Bluefin, Aurora, or Fedora Atomic)
-- Experience installing and using CLI programs
-
-## Step 1: Preparing the Template
-
-### Step 1a: Copying the Template
-
-Select `Use this Template` on this page. You can set the name and description of your repository to whatever you would like, but all other settings should be left untouched.
-
-Once you have finished copying the template, you need to enable the Github Actions workflows for your new repository.
-To enable the workflows, go to the `Actions` tab of the new repository and click the button to enable workflows.
-
-### Step 1b: Cloning the New Repository
-
-Here I will defer to the much superior GitHub documentation on the matter. You can use whichever method is easiest.
-[GitHub Documentation](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-
-Once you have the repository on your local drive, proceed to the next step.
-
-## Step 2: Initial Setup
-
-### Step 2a: Creating a Cosign Key
-
-Container signing is important for end-user security and is enabled on all Universal Blue images. By default the image builds *will fail* if you don't.
-
-First, install the [cosign CLI tool](https://edu.chainguard.dev/open-source/sigstore/cosign/how-to-install-cosign/#installing-cosign-with-the-cosign-binary)
-With the cosign tool installed, run inside your repo folder:
-
-```bash
-COSIGN_PASSWORD="" cosign generate-key-pair
+```toml
+[preferred]
+default=gnome
+org.freedesktop.impl.portal.FileChooser=kde
+org.freedesktop.impl.portal.ScreenCast=gnome
+org.freedesktop.impl.portal.Screenshot=gnome
 ```
 
-The signing key will be used in GitHub Actions and will not work if it is password protected.
+ Please also notice that the `xdg-desktop-portal-gnome` package has been bugged since 2022. When adding multiple capture sources, or reselecting the window for the source, it will not respond correctly. Follow their [#40](https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome/-/issues/40) issue about this problem.
 
-> [!WARNING]
-> Be careful to *never* accidentally commit `cosign.key` into your git repo. If this key goes out to the public, the security of your repository is compromised.
+#### Qt Theming
 
-Next, you need to add the key to GitHub. This makes use of GitHub's secret signing system.
-
-<details>
-    <summary>Using the Github Web Interface (preferred)</summary>
-
-Go to your repository settings, under `Secrets and Variables` -> `Actions`
-![image](https://user-images.githubusercontent.com/1264109/216735595-0ecf1b66-b9ee-439e-87d7-c8cc43c2110a.png)
-Add a new secret and name it `SIGNING_SECRET`, then paste the contents of `cosign.key` into the secret and save it. Make sure it's the .key file and not the .pub file. Once done, it should look like this:
-![image](https://user-images.githubusercontent.com/1264109/216735690-2d19271f-cee2-45ac-a039-23e6a4c16b34.png)
-</details>
-<details>
-<summary>Using the Github CLI</summary>
-
-If you have the `github-cli` installed, run:
+We use `qt6ct` for theming Qt apps on niri. This is optional, but if you want to use it, the best approach is to create an environment config under `~/.config/environment.d/niri.conf` containing:
 
 ```bash
-gh secret set SIGNING_SECRET < cosign.key
+QT_QPA_PLATFORM=wayland
+QT_QPA_PLATFORMTHEME=qt6ct
+QT_QPA_PLATFORMTHEME_QT6=qt6ct
 ```
-</details>
 
-### Step 2b: Choosing Your Base Image
-
-To choose a base image, simply modify the line in the container file starting with `FROM`. This will be the image your image derives from, and is your starting point for modifications.
-For a base image, you can choose any of the Universal Blue images or start from a Fedora Atomic system. Below this paragraph is a dropdown with a non-exhaustive list of potential base images.
-
-<details>
-    <summary>Base Images</summary>
-
-- Bazzite: `ghcr.io/ublue-os/bazzite:stable`
-- Aurora: `ghcr.io/ublue-os/aurora:stable`
-- Bluefin: `ghcr.io/ublue-os/bluefin:stable`
-- Universal Blue Base: `ghcr.io/ublue-os/base-main:latest`
-- Fedora: `quay.io/fedora/fedora-bootc:42`
-
-You can find more Universal Blue images on the [packages page](https://github.com/orgs/ublue-os/packages).
-</details>
-
-If you don't know which image to pick, choosing the one your system is currently on is the best bet for a smooth transition. To find out what image your system currently uses, run the following command:
-```bash
-sudo bootc status
-```
-This will show you all the info you need to know about your current image. The image you are currently on is displayed after `Booted image:`. Paste that information after the `FROM` statement in the Containerfile to set it as your base image.
-
-### Step 2c: Changing Names
-
-Change the first line in the [Justfile](./Justfile) to your image's name.
-
-To commit and push all the files changed and added in step 2 into your Github repository:
-```bash
-git add Containerfile Justfile cosign.pub
-git commit -m "Initial Setup"
-git push
-```
-Once pushed, go look at the Actions tab on your Github repository's page.  The green checkmark should be showing on the top commit, which means your new image is ready!
-
-## Step 3: Switch to Your Image
-
-From your bootc system, run the following command substituting in your Github username and image name where noted.
-```bash
-sudo bootc switch ghcr.io/<username>/<image_name>
-```
-This should queue your image for the next reboot, which you can do immediately after the command finishes. You have officially set up your custom image! See the following section for an explanation of the important parts of the template for customization.
-
-# Repository Contents
-
-## Containerfile
-
-The [Containerfile](./Containerfile) defines the operations used to customize the selected image.This file is the entrypoint for your image build, and works exactly like a regular podman Containerfile. For reference, please see the [Podman Documentation](https://docs.podman.io/en/latest/Introduction.html).
-
-## build.sh
-
-The [build.sh](./build_files/build.sh) file is called from your Containerfile. It is the best place to install new packages or make any other customization to your system. There are customization examples contained within it for your perusal.
-
-## build.yml
-
-The [build.yml](./.github/workflows/build.yml) Github Actions workflow creates your custom OCI image and publishes it to the Github Container Registry (GHCR). By default, the image name will match the Github repository name. There are several environment variables at the start of the workflow which may be of interest to change.
-
-# Building Disk Images
-
-This template provides an out of the box workflow for creating disk images (ISO, qcow, raw) for your custom OCI image which can be used to directly install onto your machines.
-
-This template provides a way to upload the disk images that is generated from the workflow to a S3 bucket. The disk images will also be available as an artifact from the job, if you wish to use an alternate provider. To upload to S3 we use [rclone](https://rclone.org/) which is able to use [many S3 providers](https://rclone.org/s3/).
-
-## Setting Up ISO Builds
-
-The [build-disk.yml](./.github/workflows/build-disk.yml) Github Actions workflow creates a disk image from your OCI image by utilizing the [bootc-image-builder](https://osbuild.org/docs/bootc/). In order to use this workflow you must complete the following steps:
-
-1. Modify `disk_config/iso.toml` to point to your custom container image before generating an ISO image.
-2. If you changed your image name from the default in `build.yml` then in the `build-disk.yml` file edit the `IMAGE_REGISTRY`, `IMAGE_NAME` and `DEFAULT_TAG` environment variables with the correct values. If you did not make changes, skip this step.
-3. Finally, if you want to upload your disk images to S3 then you will need to add your S3 configuration to the repository's Action secrets. This can be found by going to your repository settings, under `Secrets and Variables` -> `Actions`. You will need to add the following
-  - `S3_PROVIDER` - Must match one of the values from the [supported list](https://rclone.org/s3/)
-  - `S3_BUCKET_NAME` - Your unique bucket name
-  - `S3_ACCESS_KEY_ID` - It is recommended that you make a separate key just for this workflow
-  - `S3_SECRET_ACCESS_KEY` - See above.
-  - `S3_REGION` - The region your bucket lives in. If you do not know then set this value to `auto`.
-  - `S3_ENDPOINT` - This value will be specific to the bucket as well.
-
-Once the workflow is done, you'll find the disk images either in your S3 bucket or as part of the summary under `Artifacts` after the workflow is completed.
-
-# Artifacthub
-
-This template comes with the necessary tooling to index your image on [artifacthub.io](https://artifacthub.io). Use the `artifacthub-repo.yml` file at the root to verify yourself as the publisher. This is important to you for a few reasons:
-
-- The value of artifacthub is it's one place for people to index their custom images, and since we depend on each other to learn, it helps grow the community.
-- You get to see your pet project listed with the other cool projects in Cloud Native.
-- Since the site puts your README front and center, it's a good way to learn how to write a good README, learn some marketing, finding your audience, etc.
-
-[Discussion Thread](https://universal-blue.discourse.group/t/listing-your-custom-image-on-artifacthub/6446)
-
-# Justfile Documentation
-
-The `Justfile` contains various commands and configurations for building and managing container images and virtual machine images using Podman and other utilities.
-To use it, you must have installed [just](https://just.systems/man/en/introduction.html) from your package manager or manually. It is available by default on all Universal Blue images.
-
-## Environment Variables
-
-- `image_name`: The name of the image (default: "image-template").
-- `default_tag`: The default tag for the image (default: "latest").
-- `bib_image`: The Bootc Image Builder (BIB) image (default: "quay.io/centos-bootc/bootc-image-builder:latest").
-
-## Building The Image
-
-### `just build`
-
-Builds a container image using Podman.
+Make sure to run the following command the logout afterward:
 
 ```bash
-just build $target_image $tag
+systemctl --user daemon-reexec
 ```
 
-Arguments:
-- `$target_image`: The tag you want to apply to the image (default: `$image_name`).
-- `$tag`: The tag for the image (default: `$default_tag`).
+### Languages
 
-## Building and Running Virtual Machines and ISOs
+| Package         | Version  | Via    | Observation                                                                                                                                            |
+| --------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `golang`        | >=1.25.8 | `dnf5` | Used to install system-wide tools under `/usr/bin`.                                                                                                    |
+| `cargo`         | >=1.93.1 | `dnf5` | Used to install system-wide tools under `/usr/bin`.                                                                                                    |
+| `uv`            | >=0.10.9 | `dnf5` | Used to install system-wide tools under `/opt/uv`, symlinked to `/usr/bin`. Defaults to `python` >=3.14.3, which is the system default.                |
+| `node-npm`      | >=10.9.4 | `dnf5` | Depends on `node` >=22.22.0, which is installed as a dependency. Let me know if you need `pnpm` or other node tooling that we currently don't include. |
+| `just-lsp`      | >=0.4.0  | `dnf5` | Language server for your `justfile`.                                                                                                                   |
+| `gopls`         | >=0.21.1 | `dnf5` | Language server for Go code.                                                                                                                           |
+| `golangci-lint` | >=2.11.3 | `dnf5` | Can be integrated with `pre-commit` for Go code linting.                                                                                               |
+| `shfmt`         | >=3.13.0 | `dnf5` | Can be used with your editor to format shell scripts.                                                                                                  |
 
-The below commands all build QCOW2 images. To produce or use a different type of image, substitute in the command with that type in the place of `qcow2`. The available types are `qcow2`, `iso`, and `raw`.
+### Shell
 
-### `just build-qcow2`
+| Package          | Version  | Via     | Observation                                                                                                                                                                                                         |
+| ---------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kitty`          | >=0.43.1 | `dnf5`  | GPU-accelerated terminal emulator. Highly customizable.                                                                                                                                                             |
+| `fish`           | >=4.2.0  | `dnf5`  | Included in Bazzite by default.                                                                                                                                                                                     |
+| `starfish`       | >=1.24.2 | `dnf5`  | Cross-shell prompt, with good defaults. Requires `atim/starship` copr.                                                                                                                                              |
+| `chezmoi`        | >=2.70   | `dnf5`  | Used to manage dotfiles. Take a look at the [DataLabTechTV/dotfiles](https://github.com/DataLabTechTV/dotfiles) repo for an example and instructions on how to use.                                                 |
+| `direnv`         | >=2.35   | `dnf5`  | Utility to automatically load and unload `.envrc` or `.env` files per directory.                                                                                                                                    |
+| `zoxide`         | >=0.9.8  | `dnf5`  | Useful `cd` replacement, with fuzzy matching and filtering.                                                                                                                                                         |
+| `bat` (`batcat`) | >=0.25.0 | `dnf5`  | Replacement for `cat` with syntax highlighting and pager by default. You can also use it to improve readability for help messages (e.g., `cat --help \| bat -l help`) or man pages (e.g., `man cat \| bat -l man`). |
+| `rg` (`ripgrep`) | >=14.1.1 | `dnf5`  | Recursive `grep` alternative. Generally more efficiency than `grep -r`.                                                                                                                                             |
+| `fd` (`fd-find)` | >=10.4.2 | `dnf5`  | User-friendly find command. Good for quick file searching, but you might still prefer `find`, depending on the task.                                                                                                |
+| `eza`            | >=0.23.4 | `cargo` | Beautified version of `ls`, with features like icons or tree listing.                                                                                                                                               |
+| `ncdu`           | >=2.9.2  | `dnf5`  | Utility for recursively measuring storage, identifying largest directories. Useful for large file system cleanup.                                                                                                   |
+| `prettyping`     | >=1.1.0  | `dnf5`  | Utility `ping` script useful for visually monitoring packet loss.                                                                                                                                                   |
 
-Builds a QCOW2 virtual machine image.
+### Network
 
-```bash
-just build-qcow2 $target_image $tag
-```
+| Package  | Version  | Via    | Observation                                                                                 |
+| -------- | -------- | ------ | ------------------------------------------------------------------------------------------- |
+| `rclone` | >=1.73.0 | `dnf5` | This is like the `rsync` for cloud storage. It can connect to wherever, from S3 to Dropbox. |
+| `iperf3` | >=3.19.1 | `dnf5` | Useful to measure network bandwidth and performance.                                        |
+| `mkcert` | >=1.4.4  | `dnf5` | Easily run your local CA to issue certificates.                                             |
+| `nc`     | >=7.92   | `dnf5` | Swiss army knife for network communication.                                                 |
+| `nmap`   | >=7.92   | `dnf5` | Port mapping software.                                                                      |
+| `mc`     | dev      | `go`   | MinIO command line client.                                                                  |
+| `s5cmd`  | dev      | `go`   | Another S3 client.                                                                          |
+| `warp`   | dev      | `go`   | Benchmark software for S3 object stores, by MinIO.                                          |
+| `httpie` | >=3.2.4  | `uv`   | Command line REST API request tool. We include support for SigV4.                           |
 
-### `just rebuild-qcow2`
+### Graphics
 
-Rebuilds a QCOW2 virtual machine image.
+| Package             | Version    | Via    | Observation                                                                         |
+| ------------------- | ---------- | ------ | ----------------------------------------------------------------------------------- |
+| `ImageMagick-heic`  | >=7.1.1.47 | `dnf5` | ImageMagick support for HEIC format.                                                |
+| `libheif-freeworld` | >=1.20.2   | `dnf5` | Only available on the  `rpmfusion-free` repo. Adds support for Apple's HEIC format. |
+| `rembg[gpu,cli]`    | >=2.0.73   | `uv`   | AI tool to remove the background from photos.                                       |
 
-```bash
-just rebuild-vm $target_image $tag
-```
+### Dev
 
-### `just run-vm-qcow2`
+| Package               | Version   | Via    | Observation                                                                                             |
+| --------------------- | --------- | ------ | ------------------------------------------------------------------------------------------------------- |
+| `pre-commit`          | >=4.5.1   | `dnf5` | Useful to run linters and formatters before `git commit`.                                               |
+| `cloc`                | >=2.08    | `dnf5` | Counts lines of code, so you can get some stats for your codebase.                                      |
+| `delta` (`git-delta`) | >=0.18.2  | `dnf5` | A better diff for the CLI, with side-by-side support.                                                   |
+| `nvim` (`neovim`)     | >=0.11.6  | `dnf5` | Replaces `vim-minimal`. Set as the default alternative for `vim` (i.e., `vim` command will run `nvim`). |
+| `lazygit`             | >=0.60.0  | `dnf5` | Requires the `dejan/lazygit` copr.                                                                      |
+| `hugo`                | >=0.111.3 | `go`   | This is pinned to an older version that works with the [blowfish](https://blowfish.page/) theme.        |
 
-Runs a virtual machine from a QCOW2 image.
+### Containers
 
-```bash
-just run-vm-qcow2 $target_image $tag
-```
+| Package                                   | Version  | Via    | Observation                                                                                                                                                                                                                     |
+| ----------------------------------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docker` (`docker-cli`)                   | >=29.3.0 | `dnf5` | Uses the user's Podman by default, via the corresponding socket, via the provided script.                                                                                                                                       |
+| `docker-compose`(`docker-compose-switch`) | >=5.1.0  | `dnf5` | The `docker-compose` package is deprecated. This isn't a command to switch compose versions, but a new package they are switching to. Uses the user's Podman by default, via the corresponding socket, via the provided script. |
+| `lazydocker`                              | >=0.25.0 | `go`   | TUI for docker.                                                                                                                                                                                                                 |
+| `cosign`                                  | >=3.0.5  | `go`   | Used to sign container images, like this one.                                                                                                                                                                                   |
 
-### `just spawn-vm`
+### AI
 
-Runs a virtual machine using systemd-vmspawn.
+| Package  | Version  | Via              | Observation                     |
+| -------- | -------- | ---------------- | ------------------------------- |
+| `ollama` | >=0.18.2 | Official Archive | To run your LLM models locally. |
 
-```bash
-just spawn-vm rebuild="0" type="qcow2" ram="6G"
-```
+### Data
 
-## File Management
+| Package          | Version  | Via              | Observation                                                                                  |
+| ---------------- | -------- | ---------------- | -------------------------------------------------------------------------------------------- |
+| `sqlite3`        |          | `dnf5`           | Embedded SQL database, with support for WAL.                                                 |
+| `duckdb`         |          | Official Archive | Embedded SQL database, that works as a data lakehouse, supporting ETL and analytics locally. |
+| `mlr` (`miller`) |          | `dnf5`           | CSV query tool.                                                                              |
+| `yq`             | >=4.47.1 | `dnf5`           | YAML query tool similar to what `jq` is for JSON.                                            |
+| `gnuplot`        |          | `dnf5`           | Command line plotting tool, with multiple charting options, that produce images.             |
+| `termgraph`      |          | `uv`             | Command line plotting tool, that produces charts directly in the terminal.                   |
+| `visidata`       |          | `uv`             | TUI for data exploration.                                                                    |
 
-### `just check`
+### Validations
 
-Checks the syntax of all `.just` files and the `Justfile`.
+We also include a validations script, where, at this point, we only validate the `/etc/niri/config.kdl` file.
 
-### `just fix`
+# Acknowledgements
 
-Fixes the syntax of all `.just` files and the `Justfile`.
-
-### `just clean`
-
-Cleans the repository by removing build artifacts.
-
-### `just lint`
-
-Runs shell check on all Bash scripts.
-
-### `just format`
-
-Runs shfmt on all Bash scripts.
-
-## Additional resources
-
-For additional driver support, ublue maintains a set of scripts and container images available at [ublue-akmod](https://github.com/ublue-os/akmods). These images include the necessary scripts to install multiple kernel drivers within the container (Nvidia, OpenRazer, Framework...). The documentation provides guidance on how to properly integrate these drivers into your container image.
-
-## Community Examples
-
-These are images derived from this template (or similar enough to this template). Reference them when building your image!
-
-- [m2Giles' OS](https://github.com/m2giles/m2os)
-- [bOS](https://github.com/bsherman/bos)
-- [Homer](https://github.com/bketelsen/homer/)
-- [Amy OS](https://github.com/astrovm/amyos)
-- [VeneOS](https://github.com/Venefilyn/veneos)
+A big thanks to the helpful people at the Universal Blue Discord server, who promptly answered my questions on building a custom image of Bazzite.
