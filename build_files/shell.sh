@@ -9,7 +9,7 @@ dnf5 -y copr enable atim/starship
 dnf5 -y install starship
 dnf5 -y copr disable atim/starship
 
-dnf5 -y install chezmoi direnv fastfetch kitty
+dnf5 -y install chezmoi direnv kitty
 dnf5 -y install zoxide bat ripgrep fd-find
 cargo install eza
 
