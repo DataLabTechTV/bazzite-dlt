@@ -95,7 +95,7 @@ systemctl --user daemon-reexec
 | --------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `golang`        | >=1.25.8 | `dnf5` | Used to install system-wide tools under `/usr/bin`.                                                                                                    |
 | `cargo`         | >=1.93.1 | `dnf5` | Used to install system-wide tools under `/usr/bin`.                                                                                                    |
-| `uv`            | >=0.10.9 | `dnf5` | Used to install system-wide tools under `/opt/uv`, symlinked to `/usr/bin`. Defaults to `python` >=3.14.3, which is the system default.                |
+| `uv`            | >=0.10.9 | `dnf5` | Used to install system-wide tools under `/usr/share/uv`, symlinked to `/usr/bin`. Defaults to `python` >=3.14.3, which is the system default.                |
 | `node-npm`      | >=10.9.4 | `dnf5` | Depends on `node` >=22.22.0, which is installed as a dependency. Let me know if you need `pnpm` or other node tooling that we currently don't include. |
 | `just-lsp`      | >=0.4.0  | `dnf5` | Language server for your `justfile`.                                                                                                                   |
 | `gopls`         | >=0.21.1 | `dnf5` | Language server for Go code.                                                                                                                           |

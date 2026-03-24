@@ -3,8 +3,6 @@ COPY build_files /
 
 FROM ghcr.io/ublue-os/bazzite-nvidia-open:stable
 
-RUN rm /opt && mkdir /opt
-
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
   --mount=type=cache,dst=/var/cache \
   --mount=type=cache,dst=/var/log \
