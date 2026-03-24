@@ -108,7 +108,7 @@ systemctl --user daemon-reexec
 | ---------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `kitty`          | >=0.43.1 | `dnf5`  | GPU-accelerated terminal emulator. Highly customizable.                                                                                                                                                             |
 | `fish`           | >=4.2.0  | `dnf5`  | Included in Bazzite by default.                                                                                                                                                                                     |
-| `starfish`       | >=1.24.2 | `dnf5`  | Cross-shell prompt, with good defaults. Requires `atim/starship` copr.                                                                                                                                              |
+| `starfish`       | >=1.24.2 | `dnf5`  | Cross-shell prompt, with good defaults. Requires `atim/starship` COPR.                                                                                                                                              |
 | `chezmoi`        | >=2.70   | `dnf5`  | Used to manage dotfiles. Take a look at the [DataLabTechTV/dotfiles](https://github.com/DataLabTechTV/dotfiles) repo for an example and instructions on how to use.                                                 |
 | `direnv`         | >=2.35   | `dnf5`  | Utility to automatically load and unload `.envrc` or `.env` files per directory.                                                                                                                                    |
 | `zoxide`         | >=0.9.8  | `dnf5`  | Useful `cd` replacement, with fuzzy matching and filtering.                                                                                                                                                         |
@@ -149,7 +149,7 @@ systemctl --user daemon-reexec
 | `cloc`                | >=2.08    | `dnf5` | Counts lines of code, so you can get some stats for your codebase.                                      |
 | `delta` (`git-delta`) | >=0.18.2  | `dnf5` | A better diff for the CLI, with side-by-side support.                                                   |
 | `nvim` (`neovim`)     | >=0.11.6  | `dnf5` | Replaces `vim-minimal`. Set as the default alternative for `vim` (i.e., `vim` command will run `nvim`). |
-| `lazygit`             | >=0.60.0  | `dnf5` | Requires the `dejan/lazygit` copr.                                                                      |
+| `lazygit`             | >=0.60.0  | `dnf5` | Requires the `dejan/lazygit` COPR.                                                                      |
 | `hugo`                | >=0.111.3 | `go`   | This is pinned to an older version that works with the [blowfish](https://blowfish.page/) theme.        |
 
 ### Containers
