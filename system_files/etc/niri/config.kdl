@@ -231,8 +231,8 @@ binds {
   Mod+Ctrl+Shift+Page_Up { move-column-to-workspace-up; }
   Mod+Ctrl+Shift+U { move-column-to-workspace-down; }
   Mod+Ctrl+Shift+I { move-column-to-workspace-up; }
-  Mod+Ctrl+Shift+WheelScrollDown cooldown-ms=200 { move-column-to-workspace-down; }
-  Mod+Ctrl+Shift+WheelScrollUp cooldown-ms=200 { move-column-to-workspace-up; }
+  // Mod+Ctrl+Shift+WheelScrollDown cooldown-ms=200 { move-column-to-workspace-down; }
+  // Mod+Ctrl+Shift+WheelScrollUp cooldown-ms=200 { move-column-to-workspace-up; }
   Mod+Ctrl+Shift+1 { move-column-to-workspace 1; }
   Mod+Ctrl+Shift+2 { move-column-to-workspace 2; }
   Mod+Ctrl+Shift+3 { move-column-to-workspace 3; }
