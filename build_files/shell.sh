@@ -17,6 +17,7 @@ dnf5 -y install zoxide bat ripgrep fd-find
 cargo install eza
 
 dnf5 -y install ncdu
+go install github.com/pranshuparmar/witr/cmd/witr@latest
 go install filippo.io/age/cmd/...@latest
 
 go install github.com/probeldev/niri-float-sticky@latest
