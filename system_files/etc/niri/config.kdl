@@ -187,15 +187,6 @@ binds {
   Mod+Ctrl+End { move-column-to-last; }
   Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
   Mod+Ctrl+Shift+WheelScrollUp { move-column-left; }
-  Mod+Ctrl+Shift+1 { move-column-to-workspace 1; }
-  Mod+Ctrl+Shift+2 { move-column-to-workspace 2; }
-  Mod+Ctrl+Shift+3 { move-column-to-workspace 3; }
-  Mod+Ctrl+Shift+4 { move-column-to-workspace 4; }
-  Mod+Ctrl+Shift+5 { move-column-to-workspace 5; }
-  Mod+Ctrl+Shift+6 { move-column-to-workspace 6; }
-  Mod+Ctrl+Shift+7 { move-column-to-workspace 7; }
-  Mod+Ctrl+Shift+8 { move-column-to-workspace 8; }
-  Mod+Ctrl+Shift+9 { move-column-to-workspace 9; }
 
   // ------------------------------------
   // Workspaces
@@ -219,12 +210,12 @@ binds {
   Mod+9 { focus-workspace 9; }
 
   // --- Workspace moving ---
-  Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
-  Mod+Ctrl+Page_Up { move-column-to-workspace-up; }
-  Mod+Ctrl+U { move-column-to-workspace-down; }
-  Mod+Ctrl+I { move-column-to-workspace-up; }
-  Mod+Ctrl+WheelScrollDown cooldown-ms=200 { focus-workspace-down; }
-  Mod+Ctrl+WheelScrollUp cooldown-ms=200 { focus-workspace-up; }
+  Mod+Ctrl+Page_Down { move-workspace-down; }
+  Mod+Ctrl+Page_Up { move-workspace-up; }
+  Mod+Ctrl+U { move-workspace-down; }
+  Mod+Ctrl+I { move-workspace-up; }
+  Mod+Ctrl+WheelScrollDown cooldown-ms=200 { move-workspace-down; }
+  Mod+Ctrl+WheelScrollUp cooldown-ms=200 { move-workspace-up; }
   Mod+Ctrl+1 { move-workspace-to-index 1; }
   Mod+Ctrl+2 { move-workspace-to-index 2; }
   Mod+Ctrl+3 { move-workspace-to-index 3; }
@@ -234,4 +225,21 @@ binds {
   Mod+Ctrl+7 { move-workspace-to-index 7; }
   Mod+Ctrl+8 { move-workspace-to-index 8; }
   Mod+Ctrl+9 { move-workspace-to-index 9; }
+
+  // --- Workspace window moving ---
+  Mod+Ctrl+Shift+Page_Down { move-column-to-workspace-down; }
+  Mod+Ctrl+Shift+Page_Up { move-column-to-workspace-up; }
+  Mod+Ctrl+Shift+U { move-column-to-workspace-down; }
+  Mod+Ctrl+Shift+I { move-column-to-workspace-up; }
+  Mod+Ctrl+Shift+WheelScrollDown cooldown-ms=200 { move-column-to-workspace-down; }
+  Mod+Ctrl+Shift+WheelScrollUp cooldown-ms=200 { move-column-to-workspace-up; }
+  Mod+Ctrl+Shift+1 { move-column-to-workspace 1; }
+  Mod+Ctrl+Shift+2 { move-column-to-workspace 2; }
+  Mod+Ctrl+Shift+3 { move-column-to-workspace 3; }
+  Mod+Ctrl+Shift+4 { move-column-to-workspace 4; }
+  Mod+Ctrl+Shift+5 { move-column-to-workspace 5; }
+  Mod+Ctrl+Shift+6 { move-column-to-workspace 6; }
+  Mod+Ctrl+Shift+7 { move-column-to-workspace 7; }
+  Mod+Ctrl+Shift+8 { move-column-to-workspace 8; }
+  Mod+Ctrl+Shift+9 { move-column-to-workspace 9; }
 }
