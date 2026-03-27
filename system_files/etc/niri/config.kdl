@@ -1,6 +1,7 @@
 spawn-at-startup "/usr/libexec/pam_kwallet_init"
 spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
+spawn-at-startup "niri-float-sticky" "-title" "Picture-in-picture"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 
 screenshot-path "~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
@@ -68,11 +69,6 @@ window-rule {
 }
 
 window-rule {
-  match app-id="kdenlive" title="Kdenlive"
-  open-floating true
-}
-
-window-rule {
   match app-id="spotify"
   open-maximized true
 }
@@ -84,6 +80,16 @@ window-rule {
 
 window-rule {
   match app-id="code"
+  open-maximized true
+}
+
+window-rule {
+  match app-id="org.inkscape.Inkscape"
+  open-maximized true
+}
+
+window-rule {
+  match app-id="steam"
   open-maximized true
 }
 
@@ -107,22 +113,25 @@ debug {
 binds {
   // --- Global ---
   Mod+Shift+E { quit; }
+  Mod+B repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "bar" "toggle"; }
   Mod+Shift+S repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
   Mod+Space repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-  Mod+B repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "bar" "toggle"; }
+  Mod+Period repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
 
   // --- Apps ---
   Mod+Return cooldown-ms=500 { spawn "kitty" "-d" "~" "/bin/fish" "-l"; }
   Mod+Shift+Return cooldown-ms=500 { spawn "konsole"; }
 
   // --- Screenshots ---
-  Print { screenshot; }
-  Shift+Print { screenshot-screen; }
+  Print { screenshot show-pointer=false; }
+  Shift+Print { screenshot-screen show-pointer=false; }
   Mod+Print { screenshot-window; }
 
   // ------------------------------------
   // Media
   // ------------------------------------
+
+  XF86Calculator { spawn "flatpak" "run" "org.kde.kcalc"; }
 
   // --- Volume ---
   XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.03+"; }
@@ -148,6 +157,7 @@ binds {
   Mod+M { maximize-column; }
   Mod+C { center-column; }
   Mod+R { switch-preset-column-width; }
+  Mod+W { toggle-column-tabbed-display; }
   Mod+T { toggle-window-floating; }
 
   // --- Window focusing ---
@@ -161,18 +171,31 @@ binds {
   Mod+L { focus-column-right; }
   Mod+Home { focus-column-first; }
   Mod+End { focus-column-last; }
+  Mod+Shift+WheelScrollDown { focus-column-right; }
+  Mod+Shift+WheelScrollUp { focus-column-left; }
 
   // --- Window moving ---
   Mod+Ctrl+Left { move-column-left; }
   Mod+Ctrl+Down { move-window-down; }
   Mod+Ctrl+Up { move-window-up; }
   Mod+Ctrl+Right { move-column-right; }
-  Mod+Ctrl+H { move-column-left; }
+  Mod+Ctrl+H { consume-or-expel-window-left; }
   Mod+Ctrl+J { move-window-down; }
   Mod+Ctrl+K { move-window-up; }
-  Mod+Ctrl+L { move-column-right; }
+  Mod+Ctrl+L { consume-or-expel-window-right; }
   Mod+Ctrl+Home { move-column-to-first; }
   Mod+Ctrl+End { move-column-to-last; }
+  Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+  Mod+Ctrl+Shift+WheelScrollUp { move-column-left; }
+  Mod+Ctrl+Shift+1 { move-column-to-workspace 1; }
+  Mod+Ctrl+Shift+2 { move-column-to-workspace 2; }
+  Mod+Ctrl+Shift+3 { move-column-to-workspace 3; }
+  Mod+Ctrl+Shift+4 { move-column-to-workspace 4; }
+  Mod+Ctrl+Shift+5 { move-column-to-workspace 5; }
+  Mod+Ctrl+Shift+6 { move-column-to-workspace 6; }
+  Mod+Ctrl+Shift+7 { move-column-to-workspace 7; }
+  Mod+Ctrl+Shift+8 { move-column-to-workspace 8; }
+  Mod+Ctrl+Shift+9 { move-column-to-workspace 9; }
 
   // ------------------------------------
   // Workspaces
@@ -185,20 +208,6 @@ binds {
   Mod+I { focus-workspace-up; }
   Mod+WheelScrollDown cooldown-ms=200 { focus-workspace-down; }
   Mod+WheelScrollUp cooldown-ms=200 { focus-workspace-up; }
-  Mod+Ctrl+WheelScrollDown { move-column-to-workspace-down; }
-  Mod+Ctrl+WheelScrollUp { move-column-to-workspace-up; }
-
-  // --- Workspace window moving ---
-  Mod+Shift+Page_Down { move-column-to-workspace-down; }
-  Mod+Shift+Page_Up { move-column-to-workspace-up; }
-  Mod+Shift+U { move-column-to-workspace-down; }
-  Mod+Shift+I { move-column-to-workspace-up; }
-  Mod+Shift+WheelScrollDown { focus-column-right; }
-  Mod+Shift+WheelScrollUp { focus-column-left; }
-  Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
-  Mod+Ctrl+Shift+WheelScrollUp { move-column-left; }
-
-  // --- Numeric workspace focusing ---
   Mod+1 { focus-workspace 1; }
   Mod+2 { focus-workspace 2; }
   Mod+3 { focus-workspace 3; }
@@ -209,14 +218,20 @@ binds {
   Mod+8 { focus-workspace 8; }
   Mod+9 { focus-workspace 9; }
 
-  // --- Numeric workspace window moving ---
-  Mod+Ctrl+1 { move-column-to-workspace 1; }
-  Mod+Ctrl+2 { move-column-to-workspace 2; }
-  Mod+Ctrl+3 { move-column-to-workspace 3; }
-  Mod+Ctrl+4 { move-column-to-workspace 4; }
-  Mod+Ctrl+5 { move-column-to-workspace 5; }
-  Mod+Ctrl+6 { move-column-to-workspace 6; }
-  Mod+Ctrl+7 { move-column-to-workspace 7; }
-  Mod+Ctrl+8 { move-column-to-workspace 8; }
-  Mod+Ctrl+9 { move-column-to-workspace 9; }
+  // --- Workspace moving ---
+  Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+  Mod+Ctrl+Page_Up { move-column-to-workspace-up; }
+  Mod+Ctrl+U { move-column-to-workspace-down; }
+  Mod+Ctrl+I { move-column-to-workspace-up; }
+  Mod+Ctrl+WheelScrollDown cooldown-ms=200 { focus-workspace-down; }
+  Mod+Ctrl+WheelScrollUp cooldown-ms=200 { focus-workspace-up; }
+  Mod+Ctrl+1 { move-workspace-to-index 1; }
+  Mod+Ctrl+2 { move-workspace-to-index 2; }
+  Mod+Ctrl+3 { move-workspace-to-index 3; }
+  Mod+Ctrl+4 { move-workspace-to-index 4; }
+  Mod+Ctrl+5 { move-workspace-to-index 5; }
+  Mod+Ctrl+6 { move-workspace-to-index 6; }
+  Mod+Ctrl+7 { move-workspace-to-index 7; }
+  Mod+Ctrl+8 { move-workspace-to-index 8; }
+  Mod+Ctrl+9 { move-workspace-to-index 9; }
 }

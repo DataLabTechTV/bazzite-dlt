@@ -18,3 +18,5 @@ cargo install eza
 
 dnf5 -y install ncdu
 go install filippo.io/age/cmd/...@latest
+
+go install github.com/probeldev/niri-float-sticky@latest
