@@ -59,14 +59,10 @@ jobs:
           # https://linux.die.net/man/1/date
           echo "date=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)" >> $GITHUB_OUTPUT
 
-      # Image metadata for https://artifacthub.io/ - This is optional but is highly recommended so we all can get a index of all the custom images
-      # The metadata by itself is not going to do anything, you choose if you want your image to be on ArtifactHub or not.
       - name: Image Metadata
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
         id: metadata
         with:
-          # This generates all the tags for your image, you can add custom tags here too!
-          # Default tags are "$DEFAULT_TAG" and "$DEFAULT_TAG.$date".
           tags: |
             type=raw,value=${{ env.DEFAULT_TAG }}
             type=raw,value=${{ env.DEFAULT_TAG }}.{{date 'YYYYMMDD'}}
@@ -92,12 +88,12 @@ jobs:
           sep-tags: " "
           sep-annotations: " "
 
-      - name: Restore DNF package cache
-        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-        with:
-          path: /var/tmp/buildah-cache-*
-          key: ${{ runner.os }}-buildah-${{ env.IMAGE_NAME }}-${{ github.run_id }}
-          restore-keys: ${{ runner.os }}-buildah-${{ env.IMAGE_NAME }}-
+      # - name: Restore DNF package cache
+      #   uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+      #   with:
+      #     path: /var/tmp/buildah-cache-*
+      #     key: ${{ runner.os }}-buildah-${{ env.IMAGE_NAME }}-${{ github.run_id }}
+      #     restore-keys: ${{ runner.os }}-buildah-${{ env.IMAGE_NAME }}-
 
       - name: Build Image
         id: build_image
@@ -113,14 +109,14 @@ jobs:
 
           sudo buildah build "${LABEL_ARGS[@]}" --tag raw-img -f ./Containerfile .
 
-      - name: Fix DNF cache permissions
-        run: sudo chmod 777 --recursive /var/tmp/buildah-cache-* 2>/dev/null || true
+      # - name: Fix DNF cache permissions
+      #   run: sudo chmod 777 --recursive /var/tmp/buildah-cache-* 2>/dev/null || true
 
-      - name: Save DNF package cache
-        uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-        with:
-          path: /var/tmp/buildah-cache-*
-          key: ${{ runner.os }}-buildah-${{ env.IMAGE_NAME }}-${{ github.run_id }}
+      # - name: Save DNF package cache
+      #   uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+      #   with:
+      #     path: /var/tmp/buildah-cache-*
+      #     key: ${{ runner.os }}-buildah-${{ env.IMAGE_NAME }}-${{ github.run_id }}
 
       - name: Run Rechunker
         id: rechunk
