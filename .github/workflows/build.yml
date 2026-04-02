@@ -111,7 +111,7 @@ jobs:
           oci: false
 
       - name: Fix DNF cache permissions
-        run: sudo chmod 777 --recursive /var/tmp/buildah-cache-0
+        run: sudo chmod 777 --recursive /var/tmp/buildah-cache-* 2>/dev/null || true
 
       - name: Save DNF package cache
         uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
