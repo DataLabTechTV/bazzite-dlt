@@ -103,11 +103,15 @@ jobs:
         id: build_image
         run: |
           LABELS="${{ steps.metadata.outputs.labels }}"
-          LABEL_ARGS=""
+          LABEL_ARGS=()
+
           while IFS= read -r label; do
-            [ -n "$label" ] && LABEL_ARGS="$LABEL_ARGS --label $label"
+            if [ -n "$label" ]; then
+              LABEL_ARGS+=(--label "$label")
+            fi
           done <<< "$LABELS"
-          sudo buildah build $LABEL_ARGS --tag raw-img -f ./Containerfile .
+
+          sudo buildah build "${LABEL_ARGS[@]}" --tag raw-img -f ./Containerfile .
 
       - name: Fix DNF cache permissions
         run: sudo chmod 777 --recursive /var/tmp/buildah-cache-* 2>/dev/null || true
