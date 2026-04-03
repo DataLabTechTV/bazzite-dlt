@@ -21,6 +21,3 @@ go install github.com/pranshuparmar/witr/cmd/witr@latest
 go install filippo.io/age/cmd/...@latest
 
 go install github.com/probeldev/niri-float-sticky@latest
-
-dnf5 -y install lz4-devel wayland-devel wayland-protocols-devel
-cargo install --git https://codeberg.org/LGFae/awww --tag v0.12.0 awww awww-daemon
