@@ -53,10 +53,44 @@ gestures {
   }
 }
 
+
+// ------------------------------------
+// Window Rules
+// ------------------------------------
+
+// --- Global ---
+
 window-rule {
   geometry-corner-radius 16
   clip-to-geometry true
 }
+
+window-rule {
+  match is-floating=true
+  shadow { on; }
+}
+
+// --- Fixes ---
+
+window-rule {
+  match title="^Picture-in-picture$"
+  open-floating true
+  default-column-width { fixed 480; }
+  default-window-height { fixed 270; }
+  default-floating-position x=16 y=16 relative-to="bottom-right"
+}
+
+window-rule {
+  match app-id="steam" title=r#"^notificationtoasts_\d+_desktop$"#
+  default-floating-position x=-266 y=16 relative-to="top-right"
+}
+
+window-rule {
+  match app-id="steam" title="^Sign in to Steam$"
+  default-floating-position x=580 y=260 relative-to="top-left"
+}
+
+// --- App Specific ---
 
 window-rule {
   match app-id="brave-browser"
@@ -99,11 +133,33 @@ window-rule {
 }
 
 window-rule {
-  match title="^Picture-in-picture$"
-  open-floating true
-  default-column-width { fixed 480; }
-  default-window-height { fixed 270; }
-  default-floating-position x=16 y=16 relative-to="bottom-right"
+  match app-id="net.lutris.Lutris"
+  open-maximized true
+}
+
+window-rule {
+  match app-id="vesktop"
+  open-maximized true
+}
+
+window-rule {
+  match app-id="com.obsproject.Studio"
+  open-maximized true
+}
+
+window-rule {
+  match app-id="kitty"
+  default-column-width { proportion 0.66667; }
+}
+
+window-rule {
+  match app-id="io.github.amit9838.mousam"
+  default-column-width { proportion 0.66667; }
+}
+
+window-rule {
+  match app-id="io.github.kolunmi.Bazaar"
+  default-column-width { proportion 0.66667; }
 }
 
 debug {
@@ -116,6 +172,9 @@ binds {
   Mod+B repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "bar" "toggle"; }
   Mod+Shift+S repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
   Mod+Space repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+  Mod+D repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+  Mod+N repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "notifications" "toggleHistory"; }
+  Mod+Ctrl+V repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "togglePanel"; }
   Mod+Period repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
 
   // --- Apps ---
@@ -153,7 +212,8 @@ binds {
   Mod+Tab repeat=false { toggle-overview; }
 
   // --- Window resizing ---
-  Mod+F { fullscreen-window; }
+  Mod+Shift+F { fullscreen-window; }
+  Mod+F { maximize-window-to-edges; }
   Mod+M { maximize-column; }
   Mod+C { center-column; }
   Mod+R { switch-preset-column-width; }
